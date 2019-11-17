@@ -52,6 +52,7 @@
 
   <modules>
     <module>bw-util-indexing</module>
+    <module>bw-util-elasticsearch</module>
   </modules>
 
   <developers>
