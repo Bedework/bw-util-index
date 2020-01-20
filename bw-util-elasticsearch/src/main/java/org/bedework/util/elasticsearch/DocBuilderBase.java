@@ -46,7 +46,7 @@ public class DocBuilderBase implements Logged {
   /**
    *
    */
-  protected DocBuilderBase() throws IndexException {
+  protected DocBuilderBase() {
     super();
 
     builder = newBuilder();
@@ -56,17 +56,17 @@ public class DocBuilderBase implements Logged {
    *                   package private methods
    * =================================================================== */
 
-  protected XContentBuilder newBuilder() throws IndexException {
+  protected XContentBuilder newBuilder() {
     try {
       XContentBuilder builder = XContentFactory.jsonBuilder();
 
       if (debug()) {
-        builder = builder.prettyPrint();
+        builder.prettyPrint();
       }
 
       return builder;
     } catch (final Throwable t) {
-      throw new IndexException(t);
+      throw new RuntimeException(t);
     }
   }
   

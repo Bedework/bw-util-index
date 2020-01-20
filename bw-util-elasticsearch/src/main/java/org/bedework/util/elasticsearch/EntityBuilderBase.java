@@ -18,7 +18,6 @@
 */
 package org.bedework.util.elasticsearch;
 
-import org.bedework.util.indexing.IndexException;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
@@ -50,7 +49,7 @@ public class EntityBuilderBase implements Logged {
    * @param version of document
    */
   protected EntityBuilderBase(final Map<String, ?> fields,
-                    final long version) throws IndexException {
+                    final long version) {
     pushFields(fields);
 
     this.version = version;
@@ -60,7 +59,7 @@ public class EntityBuilderBase implements Logged {
    *                   public methods
    * ======================================================================== */
 
-  public String getDoctype() throws IndexException {
+  public String getDoctype() {
     return String.valueOf(getFirstValue("docType"));
   }
 
@@ -69,11 +68,11 @@ public class EntityBuilderBase implements Logged {
    *                   protected methods
    * ======================================================================== */
 
-  protected boolean pushFields(final String id) throws IndexException {
+  protected boolean pushFields(final String id) {
     return pushFields(getFirstValue(id));
   }
 
-  protected boolean pushFields(final Object objFlds) throws IndexException {
+  protected boolean pushFields(final Object objFlds) {
     if (objFlds == null) {
       return false;
     }
@@ -81,7 +80,7 @@ public class EntityBuilderBase implements Logged {
         /* Should be a Map of fields. */
 
     if (!(objFlds instanceof Map)) {
-      throw new IndexException("indexIllegalObjectClass");
+      throw new RuntimeException("indexIllegalObjectClass");
     }
 
     //noinspection unchecked
@@ -153,12 +152,12 @@ public class EntityBuilderBase implements Logged {
       return null;
     }
 
-    final List vals;
+    final List<?> vals;
 
     if (val instanceof DocumentField) {
       vals = ((DocumentField)val).getValues();
     } else if (val instanceof List) {
-      vals = (List)val;
+      vals = (List<?>)val;
     } else {
       return val;
     }
@@ -257,7 +256,7 @@ public class EntityBuilderBase implements Logged {
 
     final String s = (String)o;
 
-    return Float.valueOf(s);
+    return Float.parseFloat(s);
   }
 
   protected int getInt(final String id) {
