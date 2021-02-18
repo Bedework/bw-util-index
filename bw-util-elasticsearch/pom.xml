@@ -52,63 +52,19 @@
     </dependency>
   </dependencies>
 
-  <!--
- org.bedework:bw-util-elasticsearch:jar:4.1.1-SNAPSHOT
- +- org.bedework:bw-util-misc:jar:4.0.27
- +- org.bedework:bw-util-tz:jar:4.1.0
- |  +- org.bedework:bw-util-caching:jar:4.0.27
- |  +- org.bedework:bw-util-http:jar:4.1.0
- |  |  +- org.apache.httpcomponents:httpclient:jar:4.5.3
- |  |  \- org.apache.httpcomponents:httpcore:jar:4.4.8
- |  +- org.bedework.ical4j:ical4j:jar:2.0.12
- |  |  +- org.slf4j:slf4j-api:jar:1.7.10
- |  |  +- org.apache.commons:commons-collections4:jar:4.0
- |  |  +- org.codehaus.groovy:groovy-all:jar:2.3.2
- |  |  +- biz.aQute.bnd:bndlib:jar:2.3.0
- |  |  |  \- org.osgi:org.osgi.core:jar:4.3.1
- |  |  +- org.apache.commons:commons-lang3:jar:3.3.2
- |  |  \- commons-codec:commons-codec:jar:1.9
- |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.10.0
- +- org.elasticsearch:elasticsearch:jar:7.2.0
- |  +- org.elasticsearch:elasticsearch-core:jar:7.2.0
- |  +- org.elasticsearch:elasticsearch-secure-sm:jar:7.2.0
- |  +- org.elasticsearch:elasticsearch-x-content:jar:7.2.0
- |  |  +- org.yaml:snakeyaml:jar:1.17
- |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-smile:jar:2.8.11
- |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.8.11
- |  |  \- com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:jar:2.8.11
- |  +- org.elasticsearch:elasticsearch-geo:jar:7.2.0
- |  +- org.elasticsearch:elasticsearch-cli:jar:7.2.0
- |  |  \- net.sf.jopt-simple:jopt-simple:jar:5.0.2
- |  +- com.carrotsearch:hppc:jar:0.7.1
- |  +- joda-time:joda-time:jar:2.10.2
- |  +- com.tdunning:t-digest:jar:3.2
- |  +- org.hdrhistogram:HdrHistogram:jar:2.1.9
- |  +- org.apache.logging.log4j:log4j-api:jar:2.11.1
- |  \- org.elasticsearch:jna:jar:4.5.1
- \- org.elasticsearch.client:elasticsearch-rest-high-level-client:jar:7.2.0
-    +- org.elasticsearch.client:elasticsearch-rest-client:jar:7.2.0
-    |  +- org.apache.httpcomponents:httpasyncclient:jar:4.1.4
-    |  +- org.apache.httpcomponents:httpcore-nio:jar:4.4.11
-    |  \- commons-logging:commons-logging:jar:1.1.3
-    +- org.elasticsearch.plugin:parent-join-client:jar:7.2.0
-    +- org.elasticsearch.plugin:aggs-matrix-stats-client:jar:7.2.0
-    +- org.elasticsearch.plugin:rank-eval-client:jar:7.2.0
-    \- org.elasticsearch.plugin:lang-mustache-client:jar:7.2.0
-       \- com.github.spullara.mustache.javar:jar:0.9.3
-[  -->
   <build>
     <plugins>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>${maven.dependency.plugin.version}</version>
         <executions>
           <execution>
-            <!--
+            < ! - -
             <id>copy-dependencies</id>
             <phase>install</phase>
-            -->            <goals>
+            - - >            <goals>
             <goal>resolve</goal>
           </goals>
             <configuration>
@@ -117,115 +73,293 @@
           </execution>
         </executions>
       </plugin>
+      -->
 
       <plugin>
         <groupId>org.bedework</groupId>
         <artifactId>bw-util-maven-deploy-wfmodule</artifactId>
         <version>${bw-util-deploy.version}</version>
+
         <executions>
           <execution>
+            <id>org.bedework.org.elasticsearch.elasticsearch</id>
             <phase>install</phase>
             <goals>
               <goal>bw-deploy-wfmodule</goal>
             </goals>
+
+            <configuration>
+              <moduleName>org.bedework.org.elasticsearch.elasticsearch</moduleName>
+              <noArtifact>true</noArtifact>
+
+              <jarResources>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch-core</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch-secure-sm</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch-x-content</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.yaml</groupId>
+                  <artifactId>snakeyaml</artifactId>
+                  <version>1.17</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>com.fasterxml.jackson.dataformat</groupId>
+                  <artifactId>jackson-dataformat-smile</artifactId>
+                  <version>2.8.11</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>com.fasterxml.jackson.dataformat</groupId>
+                  <artifactId>jackson-dataformat-yaml</artifactId>
+                  <version>2.8.11</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>com.fasterxml.jackson.dataformat</groupId>
+                  <artifactId>jackson-dataformat-cbor</artifactId>
+                  <version>2.8.11</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch-geo</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>elasticsearch-cli</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>net.sf.jopt-simple</groupId>
+                  <artifactId>jopt-simple</artifactId>
+                  <version>5.0.2</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>com.carrotsearch</groupId>
+                  <artifactId>hppc</artifactId>
+                  <version>0.7.1</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>joda-time</groupId>
+                  <artifactId>joda-time</artifactId>
+                  <version>2.10.2</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>com.tdunning</groupId>
+                  <artifactId>t-digest</artifactId>
+                  <version>3.2</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.hdrhistogram</groupId>
+                  <artifactId>HdrHistogram</artifactId>
+                  <version>2.1.9</version>
+                </fileInfo>
+                <fileInfo>
+                  <groupId>org.elasticsearch</groupId>
+                  <artifactId>jna</artifactId>
+                  <version>4.5.1</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-core</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-analyzers-common</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-backward-codecs</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-grouping</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-highlighter</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-join</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-memory</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-misc</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-queries</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-queryparser</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-sandbox</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-spatial</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-spatial-extras</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-spatial3d</artifactId>
+                  <version>${lucene.version}</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-suggest</artifactId>
+                  <version>8.0.0</version>
+                </fileInfo>
+              </jarResources>
+
+              <moduleDependencies>
+                <moduleDependency>
+                  <name>org.apache.log4j</name>
+                </moduleDependency>
+              </moduleDependencies>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>org.bedework.org.elasticsearch.elasticsearch-rest-high-level-client</id>
+            <phase>install</phase>
+            <goals>
+              <goal>bw-deploy-wfmodule</goal>
+            </goals>
+
+            <configuration>
+              <moduleName>org.bedework.org.elasticsearch.elasticsearch-rest-high-level-client</moduleName>
+              <noArtifact>true</noArtifact>
+
+              <jarResources>
+                <fileInfo>
+                  <groupId>org.elasticsearch.client</groupId>
+                  <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.elasticsearch.client</groupId>
+                  <artifactId>elasticsearch-rest-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpasyncclient</artifactId>
+                  <version>4.1.4</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpcore-nio</artifactId>
+                  <version>4.4.11</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>commons-logging</groupId>
+                  <artifactId>commons-logging</artifactId>
+                  <version>1.1.3</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.elasticsearch.plugin</groupId>
+                  <artifactId>parent-join-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.elasticsearch.plugin</groupId>
+                  <artifactId>aggs-matrix-stats-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.elasticsearch.plugin</groupId>
+                  <artifactId>rank-eval-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>org.elasticsearch.plugin</groupId>
+                  <artifactId>lang-mustache-client</artifactId>
+                  <version>7.2.0</version>
+                </fileInfo>
+
+                <fileInfo>
+                  <groupId>com.github.spullara.mustache.java</groupId>
+                  <artifactId>compiler</artifactId>
+                  <version>0.9.3</version>
+                </fileInfo>
+
+              </jarResources>
+            </configuration>
           </execution>
         </executions>
 
         <configuration>
           <moduleName>org.bedework.util.indexing.elasticsearch</moduleName>
 
-          <jarDependencies>
-            <jarDependency>
-              <moduleName>org.bedework.com.fasterxml.jackson.core.annotations</moduleName>
-              <groupId>com.fasterxml.jackson.core</groupId>
-              <artifactId>jackson-annotations</artifactId>
-              <version>${jackson.version}</version>
-              <type>jar</type>
-            </jarDependency>
-          </jarDependencies>
-
-          <jarResources>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-core</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-analyzers-common</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-backward-codecs</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-grouping</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-highlighter</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-join</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-memory</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-misc</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-queries</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-queryparser</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-sandbox</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-spatial</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-spatial-extras</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-spatial3d</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-            <fileInfo>
-              <groupId>org.apache.lucene</groupId>
-              <artifactId>lucene-suggest</artifactId>
-              <version>8.0.0</version>
-            </fileInfo>
-          </jarResources>
-
           <moduleDependencies>
             <moduleDependency>
               <name>org.bedework.logging</name>
+              <!-- includes
+                   org.bedework.com.fasterxml.jackson.core.annotations -->
             </moduleDependency>
+
             <moduleDependency>
               <name>org.bedework.util.config</name>
             </moduleDependency>
@@ -237,6 +371,20 @@
             </moduleDependency>
             <moduleDependency>
               <name>org.bedework.util.misc</name>
+            </moduleDependency>
+            <moduleDependency>
+              <name>org.bedework.util.tz</name>
+              <!-- includes
+                   org.bedework.com.fasterxml.jackson.core</groupId>
+                  <artifactId>jackson-databind, core, annotations -->
+            </moduleDependency>
+
+            <moduleDependency>
+              <name>org.bedework.org.elasticsearch.elasticsearch-rest-high-level-client</name>
+            </moduleDependency>
+
+            <moduleDependency>
+              <name>org.bedework.org.elasticsearch.elasticsearch</name>
             </moduleDependency>
           </moduleDependencies>
         </configuration>
