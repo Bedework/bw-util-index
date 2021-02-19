@@ -235,6 +235,15 @@
           <groupId>org.bedework</groupId>
           <artifactId>bw-util-maven-deploy-wfmodule</artifactId>
           <version>${bw-util-deploy.version}</version>
+
+          <executions>
+            <execution>
+              <phase>install</phase>
+              <goals>
+                <goal>bw-deploy-wfmodule</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>

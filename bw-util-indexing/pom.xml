@@ -20,6 +20,10 @@
 
         <configuration>
           <moduleName>org.bedework.util.indexing</moduleName>
+
+          <moduleDependencies>
+
+          </moduleDependencies>
         </configuration>
       </plugin>
     </plugins>
