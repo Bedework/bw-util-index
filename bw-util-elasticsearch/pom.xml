@@ -267,7 +267,14 @@
 
               <moduleDependencies>
                 <moduleDependency>
-                  <name>org.apache.log4j</name>
+                  <name>org.apache.logging.log4j.api</name>
+                </moduleDependency>
+
+                <moduleDependency>
+                  <name>com.fasterxml.jackson.core.jackson-core</name>
+                </moduleDependency>
+                <moduleDependency>
+                  <name>org.bedework.com.fasterxml.jackson.core.annotations</name>
                 </moduleDependency>
               </moduleDependencies>
             </configuration>
@@ -310,12 +317,6 @@
                 </fileInfo>
 
                 <fileInfo>
-                  <groupId>commons-logging</groupId>
-                  <artifactId>commons-logging</artifactId>
-                  <version>1.1.3</version>
-                </fileInfo>
-
-                <fileInfo>
                   <groupId>org.elasticsearch.plugin</groupId>
                   <artifactId>parent-join-client</artifactId>
                   <version>7.2.0</version>
@@ -344,8 +345,30 @@
                   <artifactId>compiler</artifactId>
                   <version>0.9.3</version>
                 </fileInfo>
-
               </jarResources>
+
+              <jarDependencies>
+                <jarDependency>
+                  <moduleName>org.bedework.commons-logging</moduleName>
+                  <groupId>commons-logging</groupId>
+                  <artifactId>commons-logging</artifactId>
+                  <version>1.1.3</version>
+                </jarDependency>
+              </jarDependencies>
+
+              <moduleDependencies>
+                <moduleDependency>
+                  <name>org.bedework.org.elasticsearch.elasticsearch</name>
+                </moduleDependency>
+
+                <moduleDependency>
+                  <name>org.bedework.org.apache.httpcomponents.httpcore</name>
+                </moduleDependency>
+
+                <moduleDependency>
+                  <name>org.bedework.org.apache.httpcomponents.httpclient</name>
+                </moduleDependency>
+              </moduleDependencies>
             </configuration>
           </execution>
 
@@ -355,47 +378,47 @@
             <goals>
               <goal>bw-deploy-wfmodule</goal>
             </goals>
-
-            <configuration>
-              <moduleName>org.bedework.util.indexing.elasticsearch</moduleName>
-
-              <moduleDependencies>
-                <moduleDependency>
-                  <name>org.bedework.logging</name>
-                  <!-- includes
-                       org.bedework.com.fasterxml.jackson.core.annotations -->
-                </moduleDependency>
-
-                <moduleDependency>
-                  <name>org.bedework.util.config</name>
-                </moduleDependency>
-                <moduleDependency>
-                  <name>org.bedework.util.indexing</name>
-                </moduleDependency>
-                <moduleDependency>
-                  <name>org.bedework.util.jmx</name>
-                </moduleDependency>
-                <moduleDependency>
-                  <name>org.bedework.util.misc</name>
-                </moduleDependency>
-                <moduleDependency>
-                  <name>org.bedework.util.tz</name>
-                  <!-- includes
-                       org.bedework.com.fasterxml.jackson.core</groupId>
-                      <artifactId>jackson-databind, core, annotations -->
-                </moduleDependency>
-
-                <moduleDependency>
-                  <name>org.bedework.org.elasticsearch.elasticsearch-rest-high-level-client</name>
-                </moduleDependency>
-
-                <moduleDependency>
-                  <name>org.bedework.org.elasticsearch.elasticsearch</name>
-                </moduleDependency>
-              </moduleDependencies>
-            </configuration>
           </execution>
         </executions>
+
+        <configuration>
+          <moduleName>org.bedework.util.indexing.elasticsearch</moduleName>
+
+          <moduleDependencies>
+            <moduleDependency>
+              <name>org.bedework.logging</name>
+              <!-- includes
+                   org.bedework.com.fasterxml.jackson.core.annotations -->
+            </moduleDependency>
+
+            <moduleDependency>
+              <name>org.bedework.util.config</name>
+            </moduleDependency>
+            <moduleDependency>
+              <name>org.bedework.util.indexing</name>
+            </moduleDependency>
+            <moduleDependency>
+              <name>org.bedework.util.jmx</name>
+            </moduleDependency>
+            <moduleDependency>
+              <name>org.bedework.util.misc</name>
+            </moduleDependency>
+            <moduleDependency>
+              <name>org.bedework.util.tz</name>
+              <!-- includes
+                   org.bedework.com.fasterxml.jackson.core</groupId>
+                  <artifactId>jackson-databind, core, annotations -->
+            </moduleDependency>
+
+            <moduleDependency>
+              <name>org.bedework.org.elasticsearch.elasticsearch-rest-high-level-client</name>
+            </moduleDependency>
+
+            <moduleDependency>
+              <name>org.bedework.org.elasticsearch.elasticsearch</name>
+            </moduleDependency>
+          </moduleDependencies>
+        </configuration>
       </plugin>
     </plugins>
   </build>
