@@ -54,27 +54,6 @@
 
   <build>
     <plugins>
-      <!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${maven.dependency.plugin.version}</version>
-        <executions>
-          <execution>
-            < ! - -
-            <id>copy-dependencies</id>
-            <phase>install</phase>
-            - - >            <goals>
-            <goal>resolve</goal>
-          </goals>
-            <configuration>
-              <type>jar</type>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      -->
-
       <plugin>
         <groupId>org.bedework</groupId>
         <artifactId>bw-util-maven-deploy-wfmodule</artifactId>
