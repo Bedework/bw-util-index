@@ -67,7 +67,7 @@ public class EsUtil implements Logged {
       } else {
         host = url.substring(0, pos);
         if (pos < url.length()) {
-          port = Integer.valueOf(url.substring(pos + 1));
+          port = Integer.parseInt(url.substring(pos + 1));
         }
       }
     }
@@ -131,7 +131,7 @@ public class EsUtil implements Logged {
                  esCtl);
 
         status = esCtl.loadConfig();
-      } catch (Throwable t){
+      } catch (final Throwable t){
         t.printStackTrace();
         throw new RuntimeException(t);
       }
@@ -146,7 +146,7 @@ public class EsUtil implements Logged {
     public void stop() {
       try {
         getManagementContext().stop();
-      } catch (Throwable t){
+      } catch (final Throwable t){
         t.printStackTrace();
       }
     }
@@ -163,7 +163,7 @@ public class EsUtil implements Logged {
     }
   }
 
-  private static Configurator conf = new Configurator();
+  private static final Configurator conf = new Configurator();
 
   public static EsCtlMBean getEsCtl() throws IndexException {
     if (esCtl != null) {
@@ -213,7 +213,7 @@ public class EsUtil implements Logged {
 
       for (;;) {
         try {
-          ClusterHealthRequest request = new ClusterHealthRequest();
+          final ClusterHealthRequest request = new ClusterHealthRequest();
           final ClusterHealthResponse chr =
                   theClient.cluster().health(request, RequestOptions.DEFAULT);
 
@@ -376,7 +376,7 @@ public class EsUtil implements Logged {
       /* index is the index we were just indexing into
        */
 
-      GetAliasesRequest req = new GetAliasesRequest(alias);
+      final GetAliasesRequest req = new GetAliasesRequest(alias);
 
       final GetAliasesResponse resp =
               getClient().indices().getAlias(req, RequestOptions.DEFAULT);
@@ -398,7 +398,7 @@ public class EsUtil implements Logged {
                             .index(inm)
                             .alias(amd.alias());
             ireq.addAliasAction(removeAction);
-            AcknowledgedResponse ack =
+            final AcknowledgedResponse ack =
                     getClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);
         }
       }
@@ -409,7 +409,7 @@ public class EsUtil implements Logged {
                       .index(index)
                       .alias(alias);
       ireq.addAliasAction(addAction);
-      AcknowledgedResponse ack =
+      final AcknowledgedResponse ack =
               getClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);          }
 
       return 0;
@@ -465,7 +465,8 @@ public class EsUtil implements Logged {
 
   private void deleteIndexes(final List<String> names) throws IndexException {
     try {
-      final DeleteIndexRequest request = new DeleteIndexRequest(names.toArray(new String[names.size()]));
+      final DeleteIndexRequest request = new DeleteIndexRequest(names.toArray(
+              new String[0]));
 
       final AcknowledgedResponse deleteIndexResponse =
               getClient().indices().delete(request, RequestOptions.DEFAULT);
@@ -506,8 +507,8 @@ public class EsUtil implements Logged {
 
   private String fileToString(final String path) throws IndexException {
     final StringBuilder content = new StringBuilder();
-    try (Stream<String> stream = Files.lines(Paths.get(path),
-                                             StandardCharsets.UTF_8)) {
+    try (final Stream<String> stream = Files.lines(Paths.get(path),
+                                                   StandardCharsets.UTF_8)) {
       stream.forEach(s -> content.append(s).append("\n"));
     } catch (final Throwable t) {
       throw new IndexException(t);
@@ -520,7 +521,7 @@ public class EsUtil implements Logged {
    *                   Logged methods
    * ==================================================================== */
 
-  private BwLogger logger = new BwLogger();
+  private final BwLogger logger = new BwLogger();
 
   @Override
   public BwLogger getLogger() {

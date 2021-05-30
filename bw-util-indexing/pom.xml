@@ -9,23 +9,4 @@
   </parent>
 
   <artifactId>bw-util-indexing</artifactId>
-
-  <packaging>jar</packaging>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.bedework</groupId>
-        <artifactId>bw-util-maven-deploy-wfmodule</artifactId>
-
-        <configuration>
-          <moduleName>org.bedework.util.indexing</moduleName>
-
-          <moduleDependencies>
-
-          </moduleDependencies>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
