@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bedework</groupId>
   <artifactId>bw-util-index</artifactId>
-  <version>4.1.3-SNAPSHOT</version>
+  <version>4.1.3</version>
   <packaging>pom</packaging>
   <name>bw-util-index</name>
   <description>This project provides a number of index related utility classes and methods</description>
@@ -43,7 +43,7 @@
     <connection>scm:git:git@github.com:Bedework/bw-util-index.git</connection>
     <developerConnection>scm:git:git@github.com:Bedework/bw-util-index.git</developerConnection>
     <url>https://github.com/Bedework/bw-util-index</url>
-    <tag>bw-util-4.0.9</tag>
+    <tag>bw-util-index-4.1.3</tag>
   </scm>
 
   <issueManagement>
