@@ -14,6 +14,13 @@
   <description>This project provides a number of index related utility classes and methods</description>
   <url>https://github.com/Bedework/bw-util-index</url>
 
+  <scm>
+    <connection>scm:git:git@github.com:Bedework/bw-util-index.git</connection>
+    <developerConnection>scm:git:git@github.com:Bedework/bw-util-index.git</developerConnection>
+    <url>https://github.com/Bedework/bw-util-index</url>
+    <tag>bw-util-4.0.9</tag>
+  </scm>
+
   <modules>
     <module>bw-util-indexing</module>
     <module>bw-util-elasticsearch</module>
