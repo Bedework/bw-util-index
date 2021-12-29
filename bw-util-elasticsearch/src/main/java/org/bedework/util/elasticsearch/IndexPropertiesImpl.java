@@ -35,6 +35,12 @@ public class IndexPropertiesImpl
         implements IndexProperties {
   private String indexerURL;
 
+  private String indexerToken;
+
+  private String indexerUser;
+
+  private String indexerPw;
+
   private boolean embeddedIndexer;
 
   private boolean httpEnabled;
@@ -53,6 +59,36 @@ public class IndexPropertiesImpl
   @Override
   public String getIndexerURL() {
     return indexerURL;
+  }
+
+  @Override
+  public void setIndexerToken(final String val) {
+    indexerToken = val;
+  }
+
+  @Override
+  public String getIndexerToken() {
+    return indexerToken;
+  }
+
+  @Override
+  public void setIndexerUser(final String val) {
+    indexerUser = val;
+  }
+
+  @Override
+  public String getIndexerUser() {
+    return indexerUser;
+  }
+
+  @Override
+  public void setIndexerPw(final String val) {
+    indexerPw = val;
+  }
+
+  @Override
+  public String getIndexerPw() {
+    return indexerPw;
   }
 
   @Override

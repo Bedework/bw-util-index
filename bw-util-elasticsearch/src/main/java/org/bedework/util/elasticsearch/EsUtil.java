@@ -3,6 +3,7 @@
 */
 package org.bedework.util.elasticsearch;
 
+import org.bedework.util.http.Headers;
 import org.bedework.util.indexing.IndexException;
 import org.bedework.util.jmx.ConfBase;
 import org.bedework.util.jmx.MBeanUtil;
@@ -11,6 +12,7 @@ import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
 import org.bedework.util.timezones.DateTimeUtil;
 
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
@@ -27,6 +29,7 @@ import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.GetAliasesResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
@@ -40,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -204,10 +208,29 @@ public class EsUtil implements Logged {
         hosts[i] = new HttpHost(hp.getHost(), hp.getPort());
       }
 
-      theClient = new RestHighLevelClient(RestClient.builder(hosts));
+      final RestClientBuilder rcb = RestClient.builder(hosts);
+
+      if (idxpars.getIndexerToken() != null) {
+        final Header[] headers = new Headers().
+                add("Authorization", "Bearer " + idxpars.getIndexerToken()).
+                asArray();
+        rcb.setDefaultHeaders(headers);
+      } else if (idxpars.getIndexerUser() != null) {
+        final String ip = idxpars.getIndexerUser() + ":" +
+                idxpars.getIndexerPw();
+        final String ipb64 =
+                Base64.getEncoder()
+                      .encodeToString(ip.getBytes(StandardCharsets.UTF_8));
+        final Header[] headers = new Headers().
+                add("Authorization", "Basic " + ipb64).
+                asArray();
+        rcb.setDefaultHeaders(headers);
+      }
+
+      theClient = new RestHighLevelClient(rcb);
+
 
       /* Ensure status is at least yellow */
-
       int tries = 0;
       int yellowTries = 0;
 
