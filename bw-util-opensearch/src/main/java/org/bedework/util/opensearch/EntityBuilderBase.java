@@ -16,13 +16,13 @@
     specific language governing permissions and limitations
     under the License.
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
 
-import org.elasticsearch.common.document.DocumentField;
+import org.opensearch.common.document.DocumentField;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** Build entities from ElasticSearch documents
+/** Build entities from opensearch documents
  *
  * @author Mike Douglass douglm - rpi.edu
  *

@@ -16,20 +16,20 @@
     specific language governing permissions and limitations
     under the License.
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 import org.bedework.util.indexing.IndexException;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
 
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
+import org.opensearch.common.xcontent.XContentBuilder;
+import org.opensearch.common.xcontent.XContentFactory;
 
 import java.io.IOException;
 import java.util.Collection;
 
-/** Build documents for ElasticSearch
+/** Build documents for opensearch
  *
  * @author Mike Douglass douglm - rpi.edu
  *

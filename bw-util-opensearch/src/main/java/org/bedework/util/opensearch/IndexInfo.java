@@ -1,7 +1,7 @@
 /* ********************************************************************
     Appropriate copyright notice
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -23,6 +23,6 @@
 
   <modules>
     <module>bw-util-indexing</module>
-    <module>bw-util-elasticsearch</module>
+    <module>bw-util-opensearch</module>
   </modules>
 </project>

@@ -16,7 +16,7 @@
     specific language governing permissions and limitations
     under the License.
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 import org.bedework.util.jmx.ConfBaseMBean;
 

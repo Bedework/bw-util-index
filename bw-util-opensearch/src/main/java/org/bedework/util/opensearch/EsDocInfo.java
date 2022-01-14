@@ -1,11 +1,11 @@
 /* ********************************************************************
     Appropriate copyright notice
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 import org.bedework.util.misc.ToString;
 
-import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.opensearch.common.xcontent.XContentBuilder;
 
 /**
  * User: mike Date: 3/14/16 Time: 01:03

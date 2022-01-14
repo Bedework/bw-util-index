@@ -1,7 +1,7 @@
 /* ********************************************************************
     Appropriate copyright notice
 */
-package org.bedework.util.elasticsearch;
+package org.bedework.util.opensearch;
 
 /**
  * User: mike Date: 9/1/17 Time: 22:55
