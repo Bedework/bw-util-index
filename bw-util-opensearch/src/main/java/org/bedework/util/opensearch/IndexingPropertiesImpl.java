@@ -30,9 +30,9 @@ import org.bedework.util.misc.ToString;
  */
 @ConfInfo(elementName = "index-properties",
           type = "org.bedework.util.opensearch.IndexProperties")
-public class IndexPropertiesImpl
-        extends ConfigBase<IndexPropertiesImpl>
-        implements IndexProperties {
+public class IndexingPropertiesImpl
+        extends ConfigBase<IndexingPropertiesImpl>
+        implements IndexingProperties {
   private String indexerURL;
 
   private String indexerToken;
@@ -41,15 +41,13 @@ public class IndexPropertiesImpl
 
   private String indexerPw;
 
-  private boolean embeddedIndexer;
-
-  private boolean httpEnabled;
-
   private String clusterName;
 
   private String nodeName;
 
-  private String dataDir;
+  private String keyStore;
+
+  private String keyStorePw;
 
   @Override
   public void setIndexerURL(final String val) {
@@ -92,26 +90,6 @@ public class IndexPropertiesImpl
   }
 
   @Override
-  public void setEmbeddedIndexer(final boolean val) {
-    embeddedIndexer = val;
-  }
-
-  @Override
-  public boolean getEmbeddedIndexer() {
-    return embeddedIndexer;
-  }
-
-  @Override
-  public void setHttpEnabled(final boolean val) {
-    httpEnabled = val;
-  }
-
-  @Override
-  public boolean getHttpEnabled() {
-    return httpEnabled;
-  }
-
-  @Override
   public void setClusterName(final String val) {
     clusterName = val;
   }
@@ -132,13 +110,23 @@ public class IndexPropertiesImpl
   }
 
   @Override
-  public void setDataDir(final String val) {
-    dataDir = val;
+  public void setKeyStore(final String val) {
+    keyStore = val;
   }
 
   @Override
-  public String getDataDir() {
-    return dataDir;
+  public String getKeyStore() {
+    return keyStore;
+  }
+
+  @Override
+  public void setKeyStorePw(final String val) {
+    keyStorePw = val;
+  }
+
+  @Override
+  public String getKeyStorePw() {
+    return keyStorePw;
   }
 
   /* ====================================================================
@@ -150,11 +138,9 @@ public class IndexPropertiesImpl
     final ToString ts = new ToString(this);
 
     ts.append("indexerURL", getIndexerURL());
-    ts.append("embeddedIndexer", getEmbeddedIndexer());
-    ts.append("httpEnabled", getHttpEnabled());
     ts.append("clusterName", getClusterName());
     ts.append("nodeName", getNodeName());
-    ts.append("dataDir", getDataDir());
+    ts.append("keyStore", getKeyStore());
 
     return ts.toString();
   }

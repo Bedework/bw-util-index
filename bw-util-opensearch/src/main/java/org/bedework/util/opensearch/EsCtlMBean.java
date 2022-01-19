@@ -25,7 +25,8 @@ import org.bedework.util.jmx.ConfBaseMBean;
  * @author douglm
  *
  */
-public interface EsCtlMBean extends ConfBaseMBean, IndexProperties {
+public interface EsCtlMBean extends ConfBaseMBean,
+        IndexingProperties {
   String serviceName = "org.bedework.es:service=esctl";
   
   /**

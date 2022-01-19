@@ -5,15 +5,21 @@ package org.bedework.util.opensearch;
 
 import org.bedework.util.http.Headers;
 import org.bedework.util.indexing.IndexException;
-import org.bedework.util.jmx.ConfBase;
-import org.bedework.util.jmx.MBeanUtil;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
+import org.bedework.util.misc.response.GetEntityResponse;
 import org.bedework.util.timezones.DateTimeUtil;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.ssl.SSLContexts;
 import org.opensearch.OpenSearchException;
 import org.opensearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.opensearch.action.admin.cluster.health.ClusterHealthResponse;
@@ -39,11 +45,11 @@ import org.opensearch.common.xcontent.XContentType;
 import org.opensearch.index.VersionType;
 import org.opensearch.rest.RestStatus;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,147 +57,69 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import javax.management.ObjectName;
+import javax.net.ssl.SSLContext;
+
+import static org.bedework.util.misc.response.Response.Status.failed;
 
 //import org.bedework.util.timezones.DateTimeUtil;
 
 /**
  * User: mike Date: 3/13/16 Time: 23:28
  */
-public class EsUtil implements Logged {
-  private static class HostPort {
-    private final String host;
-    private int port = 9300;
-
-    HostPort(final String url) {
-      final int pos = url.indexOf(":");
-
-      if (pos < 0) {
-        host = url;
-      } else {
-        host = url.substring(0, pos);
-        if (pos < url.length()) {
-          port = Integer.parseInt(url.substring(pos + 1));
-        }
-      }
-    }
-
-    String getHost() {
-      return host;
-    }
-
-    int getPort() {
-      return port;
-    }
-  }
-
-  private final List<HostPort> esHosts = new ArrayList<>();
+public class SearchClient implements Logged {
+  private final HostPortList searchHosts;
   private static RestHighLevelClient theClient;
   private static final Object clientSyncher = new Object();
 
-  private final IndexProperties idxpars;
-  
-  public EsUtil(final IndexProperties idxpars) {
+  private final IndexingProperties idxpars;
+
+  public SearchClient(final IndexingProperties idxpars) {
     this.idxpars = idxpars;
-
-    final String urls = idxpars.getIndexerURL();
-
-    if (urls == null) {
-      esHosts.add(new HostPort("localhost"));
-    } else {
-      final String[] urlsSplit = urls.split(",");
-
-      for (final String url : urlsSplit) {
-        if ((url != null) && (url.length() > 0)) {
-          esHosts.add(new HostPort(url));
-        }
-      }
-    }
-  }
-  
-  private static EsCtlMBean esCtl;
-
-  static class Configurator extends ConfBase {
-    EsCtl esCtl;
-
-    Configurator() {
-      super("org.bedework.es:service=es");
-    }
-
-    @Override
-    public String loadConfig() {
-      return null;
-    }
-
-    @Override
-    public void start() {
-      String status = null;
-      
-      try {
-        getManagementContext().start();
-
-        esCtl = new EsCtl();
-        register(new ObjectName(esCtl.getServiceName()),
-                 esCtl);
-
-        status = esCtl.loadConfig();
-      } catch (final Throwable t){
-        t.printStackTrace();
-        throw new RuntimeException(t);
-      }
-
-      if (!"OK".equals(status)) {
-        throw new RuntimeException("Unable to load configuration. " +
-                                           "Status: " + status);
-      }
-    }
-
-    @Override
-    public void stop() {
-      try {
-        getManagementContext().stop();
-      } catch (final Throwable t){
-        t.printStackTrace();
-      }
-    }
-    
-    boolean isRegistered() {
-      try {
-        return getManagementContext()
-                .getMBeanServer()
-                .isRegistered(new ObjectName(EsCtlMBean.serviceName));
-      } catch (final Throwable t) {
-        t.printStackTrace();
-        throw new RuntimeException(t);
-      }
-    }
+    searchHosts = new HostPortList(idxpars.getIndexerURL());
   }
 
-  private static final Configurator conf = new Configurator();
-
-  public static EsCtlMBean getEsCtl() throws IndexException {
-    if (esCtl != null) {
-      return esCtl;
-    }
+  public GetEntityResponse<RestHighLevelClient> getClient() {
+    final GetEntityResponse<RestHighLevelClient> resp =
+            new GetEntityResponse<>();
 
     try {
-      /* See if somebody else registered the mbean
-       */
-      if (!conf.isRegistered()) {
-        /* We need to register it */
-        conf.start();
-      }
-      
-      esCtl = (EsCtlMBean)MBeanUtil.getMBean(EsCtlMBean.class,
-                                             EsCtlMBean.serviceName);
-    } catch (final Throwable t) {
-      throw new IndexException(t);
+      resp.setEntity(getSearchClient());
+    } catch (final RuntimeException cfe) {
+      resp.setStatus(failed);
+      resp.setMessage(cfe.getLocalizedMessage());
     }
-
-    return esCtl;
+    return resp;
   }
 
-  public RestHighLevelClient getClient() throws IndexException {
+  private static class HttpClientConfigCallBack
+          implements RestClientBuilder.HttpClientConfigCallback {
+    private final CredentialsProvider credentialsProvider;
+    private final SSLContext sslcontext;
+    HttpClientConfigCallBack(
+            final CredentialsProvider credentialsProvider,
+            final SSLContext sslcontext) {
+      this.credentialsProvider = credentialsProvider;
+      this.sslcontext = sslcontext;
+    }
+
+    @Override
+    public HttpAsyncClientBuilder customizeHttpClient(
+    final HttpAsyncClientBuilder httpClientBuilder) {
+      final HttpAsyncClientBuilder res = httpClientBuilder;
+      if (credentialsProvider != null) {
+        res.setDefaultCredentialsProvider(credentialsProvider);
+      }
+
+      if (sslcontext != null) {
+        res.setSSLContext(sslcontext);
+      }
+
+      return res;
+    }
+  };
+
+
+  public RestHighLevelClient getSearchClient() {
     if (theClient != null) {
       return theClient;
     }
@@ -201,14 +129,17 @@ public class EsUtil implements Logged {
         return theClient;
       }
 
-      final HttpHost[] hosts = new HttpHost[esHosts.size()];
+      final HttpHost[] hosts = new HttpHost[searchHosts.size()];
 
-      for (int i = 0; i < esHosts.size(); i++) {
-        final HostPort hp = esHosts.get(i);
-        hosts[i] = new HttpHost(hp.getHost(), hp.getPort());
+      for (int i = 0; i < searchHosts.size(); i++) {
+        final HostPort hp = searchHosts.get(i);
+        hosts[i] = new HttpHost(hp.getHost(), hp.getPort(),
+                                hp.getScheme());
       }
 
       final RestClientBuilder rcb = RestClient.builder(hosts);
+      CredentialsProvider credentialsProvider = null;
+      SSLContext sslcontext = null;
 
       if (idxpars.getIndexerToken() != null) {
         final Header[] headers = new Headers().
@@ -216,19 +147,44 @@ public class EsUtil implements Logged {
                 asArray();
         rcb.setDefaultHeaders(headers);
       } else if (idxpars.getIndexerUser() != null) {
-        final String ip = idxpars.getIndexerUser() + ":" +
-                idxpars.getIndexerPw();
-        final String ipb64 =
-                Base64.getEncoder()
-                      .encodeToString(ip.getBytes(StandardCharsets.UTF_8));
-        final Header[] headers = new Headers().
-                add("Authorization", "Basic " + ipb64).
-                asArray();
-        rcb.setDefaultHeaders(headers);
+        credentialsProvider = new BasicCredentialsProvider();
+
+        credentialsProvider.setCredentials(
+                AuthScope.ANY,
+                new UsernamePasswordCredentials(idxpars.getIndexerUser(),
+                                                idxpars.getIndexerPw()));
       }
 
-      theClient = new RestHighLevelClient(rcb);
+      if (idxpars.getKeyStore() != null) {
+        // Trust own CA and all self-signed certs
 
+        try {
+          final char[] pw;
+
+          if (idxpars.getKeyStorePw() == null) {
+            pw = null;
+          } else {
+            pw = idxpars.getKeyStorePw().toCharArray();
+          }
+
+          sslcontext = SSLContexts
+                  .custom()
+                  .loadTrustMaterial(
+                          new File(idxpars.getKeyStore()),
+                          pw,
+                          new TrustSelfSignedStrategy())
+                  .build();
+        } catch (final Throwable t) {
+          throw new RuntimeException(t);
+        }
+      }
+
+      final HttpClientConfigCallBack hcccb =
+              new HttpClientConfigCallBack(credentialsProvider,
+                                           sslcontext);
+      rcb.setHttpClientConfigCallback(hcccb);
+
+      theClient = new RestHighLevelClient(rcb);
 
       /* Ensure status is at least yellow */
       int tries = 0;
@@ -247,11 +203,10 @@ public class EsUtil implements Logged {
           if (chr.getStatus() == ClusterHealthStatus.YELLOW) {
             yellowTries++;
 
-            if (yellowTries > 60) {
+            if (yellowTries > 10) {
               warn("Going ahead anyway on YELLOW status");
+              break;
             }
-
-            break;
           }
 
           tries++;
@@ -264,9 +219,9 @@ public class EsUtil implements Logged {
 
           Thread.sleep(1000);
         } catch(final InterruptedException ex) {
-          throw new IndexException("Interrupted out of getClient");
+          throw new RuntimeException("Interrupted out of getClient");
         } catch (final Throwable t) {
-          throw new IndexException(t);
+          throw new RuntimeException(t);
         }
       }
 
@@ -292,7 +247,7 @@ public class EsUtil implements Logged {
     }
 
     try {
-      return getClient().index(req, RequestOptions.DEFAULT);
+      return getSearchClient().index(req, RequestOptions.DEFAULT);
     } catch (final Throwable t) {
       throw new IndexException(t);
     }
@@ -304,7 +259,7 @@ public class EsUtil implements Logged {
     final GetRequest req = new GetRequest(index,
                                          id);
     try {
-      final GetResponse resp = getClient().get(req, RequestOptions.DEFAULT);
+      final GetResponse resp = getSearchClient().get(req, RequestOptions.DEFAULT);
 
       if (!resp.isExists()) {
         return null;
@@ -336,7 +291,7 @@ public class EsUtil implements Logged {
       req.source(mappingStr, XContentType.JSON);
 
       final CreateIndexResponse resp =
-              getClient().indices().create(req, RequestOptions.DEFAULT);
+              getSearchClient().indices().create(req, RequestOptions.DEFAULT);
 
       info("Index created");
 
@@ -360,7 +315,7 @@ public class EsUtil implements Logged {
       final GetAliasesRequest req = new GetAliasesRequest();
 
       final GetAliasesResponse resp =
-              getClient().indices().getAlias(req, RequestOptions.DEFAULT);
+              getSearchClient().indices().getAlias(req, RequestOptions.DEFAULT);
 
       final Map<String, Set<AliasMetadata>> aliases = resp.getAliases();
 
@@ -402,7 +357,7 @@ public class EsUtil implements Logged {
       final GetAliasesRequest req = new GetAliasesRequest(alias);
 
       final GetAliasesResponse resp =
-              getClient().indices().getAlias(req, RequestOptions.DEFAULT);
+              getSearchClient().indices().getAlias(req, RequestOptions.DEFAULT);
 
       if (resp.status() == RestStatus.OK) {
         final Map<String, Set<AliasMetadata>> aliases =
@@ -422,7 +377,7 @@ public class EsUtil implements Logged {
                             .alias(amd.alias());
             ireq.addAliasAction(removeAction);
             final AcknowledgedResponse ack =
-                    getClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);
+                    getSearchClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);
         }
       }
 
@@ -433,15 +388,13 @@ public class EsUtil implements Logged {
                       .alias(alias);
       ireq.addAliasAction(addAction);
       final AcknowledgedResponse ack =
-              getClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);          }
+              getSearchClient().indices().updateAliases(ireq, RequestOptions.DEFAULT);          }
 
       return 0;
     } catch (final OpenSearchException ese) {
       // Failed somehow
       error(ese);
       return -1;
-    } catch (final IndexException ie) {
-      throw ie;
     } catch (final Throwable t) {
       throw new IndexException(t);
     }
@@ -492,7 +445,9 @@ public class EsUtil implements Logged {
               new String[0]));
 
       final AcknowledgedResponse deleteIndexResponse =
-              getClient().indices().delete(request, RequestOptions.DEFAULT);
+              getSearchClient()
+                      .indices()
+                      .delete(request, RequestOptions.DEFAULT);
     } catch (final Throwable t) {
       throw new IndexException(t);
     }

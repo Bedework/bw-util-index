@@ -29,7 +29,7 @@ import java.util.Set;
  * @author douglm
  *
  */
-public class EsCtl extends ConfBase<IndexPropertiesImpl>
+public class EsCtl extends ConfBase<IndexingPropertiesImpl>
         implements EsCtlMBean {
   /* Name of the property holding the location of the config data */
   public static final String confuriPname = "org.bedework.esctl.confuri";
@@ -41,8 +41,8 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
     Set<IndexInfo> is = null;
 
     try {
-      is = getEsUtil().getIndexInfo();
-    } catch (Throwable t) {
+      is = getSearchClient().getIndexInfo();
+    } catch (final Throwable t) {
       info(" * Exception getting index info:");
       info(" * " + t.getLocalizedMessage());
     }
@@ -52,7 +52,8 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
 
   private final static String nm = "esctl";
 
-  private EsUtil esUtil;
+  private OschUtil oschUtil;
+  private SearchClient sch;
 
   /**
    */
@@ -113,26 +114,6 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
   }
 
   @Override
-  public void setEmbeddedIndexer(final boolean val) {
-    getConfig().setEmbeddedIndexer(val);
-  }
-
-  @Override
-  public boolean getEmbeddedIndexer() {
-    return getConfig().getEmbeddedIndexer();
-  }
-
-  @Override
-  public void setHttpEnabled(final boolean val) {
-    getConfig().setHttpEnabled(val);
-  }
-
-  @Override
-  public boolean getHttpEnabled() {
-    return getConfig().getHttpEnabled();
-  }
-
-  @Override
   public void setClusterName(final String val) {
     getConfig().setClusterName(val);
   }
@@ -153,20 +134,30 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
   }
 
   @Override
-  public void setDataDir(final String val) {
-    getConfig().setDataDir(val);
+  public void setKeyStore(final String val) {
+    getConfig().setKeyStore(val);
   }
 
   @Override
-  public String getDataDir() {
-    return getConfig().getDataDir();
+  public String getKeyStore() {
+    return getConfig().getKeyStore();
+  }
+
+  @Override
+  public void setKeyStorePw(final String val) {
+    getConfig().setKeyStorePw(val);
+  }
+
+  @Override
+  public String getKeyStorePw() {
+    return getConfig().getKeyStorePw();
   }
 
   @Override
   public String listIndexes() {
     try {
-      return listIndexes(getEsUtil().getIndexInfo());
-    } catch (Throwable t) {
+      return listIndexes(getSearchClient().getIndexInfo());
+    } catch (final Throwable t) {
       return t.getLocalizedMessage();
     }
   }
@@ -186,29 +177,29 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
 
   @Override
   public String loadConfig() {
-    return loadConfig(IndexPropertiesImpl.class);
+    return loadConfig(IndexingPropertiesImpl.class);
   }
 
   /* ========================================================================
    * Private methods
    * ======================================================================== */
 
-  private String listIndexes(Set<IndexInfo> is) {
+  private String listIndexes(final Set<IndexInfo> is) {
     if (Util.isEmpty(is)) {
       return "No indexes found";
     }
 
-    StringBuilder res = new StringBuilder("Indexes");
+    final StringBuilder res = new StringBuilder("Indexes");
 
     res.append("------------------------\n");
 
-    for (IndexInfo ii: is) {
+    for (final IndexInfo ii: is) {
       res.append(ii.getIndexName());
 
       if (!Util.isEmpty(ii.getAliases())) {
         String delim = "<----";
 
-        for (String a: ii.getAliases()) {
+        for (final var a: ii.getAliases()) {
           res.append(delim);
           res.append(a);
           delim = ", ";
@@ -226,21 +217,31 @@ public class EsCtl extends ConfBase<IndexPropertiesImpl>
     res.add(msg + "\n");
   }
 
-  private EsUtil getEsUtil() {
-    if (esUtil != null) {
-      return esUtil;
+  private OschUtil getOschUtil() {
+    if (oschUtil != null) {
+      return oschUtil;
     }
 
-    esUtil = new EsUtil(getConfig());
+    oschUtil = new OschUtil(getConfig());
 
-    return esUtil;
+    return oschUtil;
+  }
+
+  private SearchClient getSearchClient() {
+    if (sch != null) {
+      return sch;
+    }
+
+    sch = new SearchClient(getConfig());
+
+    return sch;
   }
 
   /* ====================================================================
    *                   Logged methods
    * ==================================================================== */
 
-  private BwLogger logger = new BwLogger();
+  private final BwLogger logger = new BwLogger();
 
   @Override
   public BwLogger getLogger() {

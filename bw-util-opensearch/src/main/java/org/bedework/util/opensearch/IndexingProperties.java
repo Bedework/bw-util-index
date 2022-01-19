@@ -29,7 +29,7 @@ import org.bedework.util.jmx.MBeanInfo;
  *
  */
 @ConfInfo(elementName = "index-properties")
-public interface IndexProperties {
+public interface IndexingProperties {
   /**
    *
    * @param val the indexer url
@@ -84,32 +84,6 @@ public interface IndexProperties {
 
   /**
    *
-   * @param val true if we run an embedded indexer
-   */
-  void setEmbeddedIndexer(boolean val);
-
-  /** Do we run an embedded indexer?
-   *
-   * @return flag
-   */
-  @MBeanInfo("Do we run an embedded indexer?")
-  boolean getEmbeddedIndexer();
-
-  /** 
-   *
-   * @param val true if we run indexer with http enabled
-   */
-  void setHttpEnabled(boolean val);
-
-  /** Do we run indexer with http enabled?
-   *
-   * @return flag
-   */
-  @MBeanInfo("Do we run indexer with http enabled?")
-  boolean getHttpEnabled();
-
-  /**
-   *
    * @param val the cluster name
    */
   void setClusterName(String val);
@@ -136,14 +110,27 @@ public interface IndexProperties {
 
   /** 
    *
-   * @param val  the data directory for embedded
+   * @param val  the path to a keystore for https root certs
    */
-  void setDataDir(String val);
+  void setKeyStore(String val);
 
-  /** Get the data directory for embedded
+  /**
    *
-   * @return name
+   * @return path to keystore
    */
-  @MBeanInfo("data directory for embedded")
-  String getDataDir();
+  @MBeanInfo("path to keystore")
+  String getKeyStore();
+
+  /**
+   *
+   * @param val  the keystore password
+   */
+  void setKeyStorePw(String val);
+
+  /**
+   *
+   * @return keystore password
+   */
+  @MBeanInfo("keystore password or null")
+  String getKeyStorePw();
 }
