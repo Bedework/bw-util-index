@@ -31,8 +31,8 @@ import java.util.Set;
  */
 public class EsCtl extends ConfBase<IndexingPropertiesImpl>
         implements EsCtlMBean {
-  /* Name of the property holding the location of the config data */
-  public static final String confuriPname = "org.bedework.esctl.confuri";
+  /* Name of the directory holding the config data */
+  private static final String confDirName = "esctl";
 
   public void runInit() {
     /* List the indexes in use - ensures we have an indexer early on */
@@ -58,11 +58,7 @@ public class EsCtl extends ConfBase<IndexingPropertiesImpl>
   /**
    */
   public EsCtl() {
-    super(getServiceName(nm));
-
-    setConfigName(nm);
-
-    setConfigPname(confuriPname);
+    super(getServiceName(nm), confDirName, nm);
   }
 
   /**

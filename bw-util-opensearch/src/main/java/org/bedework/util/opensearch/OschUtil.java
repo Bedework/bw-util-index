@@ -36,7 +36,9 @@ public class OschUtil implements Logged {
     EsCtl esCtl;
 
     Configurator() {
-      super("org.bedework.es:service=es");
+      super("org.bedework.es:service=es",
+            (String)null,
+            null);
     }
 
     @Override
