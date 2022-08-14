@@ -32,7 +32,7 @@ import java.util.Set;
 public class EsCtl extends ConfBase<IndexingPropertiesImpl>
         implements EsCtlMBean {
   /* Name of the directory holding the config data */
-  private static final String confDirName = "esctl";
+  private static final String confDirName = "opensearch";
 
   public void runInit() {
     /* List the indexes in use - ensures we have an indexer early on */
