@@ -46,6 +46,12 @@
       <artifactId>bw-util-tz</artifactId>
     </dependency>
 
+    <!-- Override with a later version -->
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.opensearch</groupId>
       <artifactId>opensearch</artifactId>
