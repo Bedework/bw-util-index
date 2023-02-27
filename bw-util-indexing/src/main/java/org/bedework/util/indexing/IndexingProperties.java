@@ -16,7 +16,7 @@
     specific language governing permissions and limitations
     under the License.
  */
-package org.bedework.util.opensearch;
+package org.bedework.util.indexing;
 
 import org.bedework.util.config.ConfInfo;
 import org.bedework.util.jmx.MBeanInfo;

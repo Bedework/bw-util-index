@@ -10,4 +10,16 @@
 
   <artifactId>bw-util-indexing</artifactId>
   <name>Bedework: indexing related utility classes</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bedework</groupId>
+      <artifactId>bw-util-config</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bedework</groupId>
+      <artifactId>bw-util-jmx</artifactId>
+    </dependency>
+  </dependencies>
 </project>

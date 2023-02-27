@@ -16,7 +16,7 @@
     specific language governing permissions and limitations
     under the License.
 */
-package org.bedework.util.opensearch;
+package org.bedework.util.indexing;
 
 import org.bedework.util.config.ConfInfo;
 import org.bedework.util.config.ConfigBase;
@@ -29,7 +29,7 @@ import org.bedework.util.misc.ToString;
  *
  */
 @ConfInfo(elementName = "index-properties",
-          type = "org.bedework.util.opensearch.IndexProperties")
+          type = "org.bedework.util.indexing.IndexProperties")
 public class IndexingPropertiesImpl
         extends ConfigBase<IndexingPropertiesImpl>
         implements IndexingProperties {

@@ -5,6 +5,7 @@ package org.bedework.util.opensearch;
 
 import org.bedework.util.http.Headers;
 import org.bedework.util.indexing.IndexException;
+import org.bedework.util.indexing.IndexingProperties;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;

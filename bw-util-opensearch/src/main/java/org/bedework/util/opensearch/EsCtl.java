@@ -18,6 +18,7 @@
 */
 package org.bedework.util.opensearch;
 
+import org.bedework.util.indexing.IndexingPropertiesImpl;
 import org.bedework.util.jmx.ConfBase;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.misc.Util;

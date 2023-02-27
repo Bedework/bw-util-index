@@ -4,6 +4,7 @@
 package org.bedework.util.opensearch;
 
 import org.bedework.util.indexing.IndexException;
+import org.bedework.util.indexing.IndexingProperties;
 import org.bedework.util.jmx.ConfBase;
 import org.bedework.util.jmx.MBeanUtil;
 import org.bedework.util.logging.BwLogger;

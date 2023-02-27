@@ -18,6 +18,7 @@
 */
 package org.bedework.util.opensearch;
 
+import org.bedework.util.indexing.IndexingProperties;
 import org.bedework.util.jmx.ConfBaseMBean;
 
 /** Parameters for interactions with elastic search
