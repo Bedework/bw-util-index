@@ -24,6 +24,7 @@ import org.bedework.util.misc.Util;
 
 import org.opensearch.common.document.DocumentField;
 
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
@@ -217,6 +218,16 @@ public class EntityBuilderBase implements Logged {
     }
 
     return Integer.valueOf(s);
+  }
+
+  protected BigDecimal getBigDecimal(final String id) {
+    final String s = (String)getFirstValue(id);
+
+    if (s == null) {
+      return null;
+    }
+
+    return new BigDecimal(s);
   }
 
   protected Long getLong(final String name) {
