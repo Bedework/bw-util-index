@@ -4,6 +4,7 @@
 package org.bedework.util.opensearch;
 
 import org.bedework.util.http.Headers;
+import org.bedework.util.indexing.ContextInfo;
 import org.bedework.util.indexing.IndexException;
 import org.bedework.util.indexing.IndexingProperties;
 import org.bedework.util.logging.BwLogger;
@@ -12,11 +13,14 @@ import org.bedework.util.misc.Util;
 import org.bedework.util.misc.response.GetEntityResponse;
 import org.bedework.util.timezones.DateTimeUtil;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
@@ -34,6 +38,7 @@ import org.opensearch.action.index.IndexRequest;
 import org.opensearch.action.index.IndexResponse;
 import org.opensearch.action.support.master.AcknowledgedResponse;
 import org.opensearch.client.GetAliasesResponse;
+import org.opensearch.client.Request;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestClientBuilder;
@@ -47,6 +52,7 @@ import org.opensearch.index.VersionType;
 import org.opensearch.rest.RestStatus;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -118,7 +124,6 @@ public class SearchClient implements Logged {
       return res;
     }
   };
-
 
   public RestHighLevelClient getSearchClient() {
     if (theClient != null) {
@@ -440,6 +445,83 @@ public class SearchClient implements Logged {
     return purged;
   }
 
+  private final static ObjectMapper jsonOm = new ObjectMapper();
+
+  public List<ContextInfo> getContextInfo() {
+    if (theClient == null) {
+      throw new RuntimeException("No client for call");
+    }
+
+    final Request req = new Request(HttpGet.METHOD_NAME,
+                                   "_nodes/stats/indices/search");
+
+    final var response = new ArrayList<ContextInfo>();
+    try {
+      final var resp = theClient.getLowLevelClient().performRequest(req);
+
+      if ((resp.getStatusLine().getStatusCode() / 100) != 2) {
+          return response;
+      }
+
+      final var ent = resp.getEntity();
+
+      if ((ent == null) || (ent.getContent() == null)) {
+        return response;
+      }
+
+      final JsonNode root = jsonOm.readTree(ent.getContent());
+
+      if (root == null) {
+        return response;
+      }
+
+      final var nodes = root.get("nodes");
+      if (nodes == null) {
+        return response;
+      }
+
+      for (final var prop: nodes.properties()) {
+        final var node = prop.getValue();
+        final var nameNode = node.get("name");
+        if (nameNode == null) {
+          continue;
+        }
+
+        final var indices = node.get("indices");
+        if (indices == null) {
+          continue;
+        }
+
+        final var snode = indices.get("search");
+        if (snode == null) {
+          continue;
+        }
+
+        final var sninfo = new ContextInfo.IndexInfo(
+                "search",
+                longVal(snode, "open_contexts"),
+                longVal(snode, "scroll_total"),
+                longVal(snode, "scroll_current"));
+        final var nodeRes = new ContextInfo(nameNode.textValue(),
+                                            sninfo);
+        response.add(nodeRes);
+      }
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    return response;
+  }
+
+  private long longVal(final JsonNode nd, final String name) {
+    final var fld = nd.get(name);
+    if (fld == null) {
+      return 0;
+    }
+
+    return fld.asLong(0);
+  }
+
   private void deleteIndexes(final List<String> names) throws IndexException {
     try {
       final DeleteIndexRequest request = new DeleteIndexRequest(names.toArray(
@@ -453,7 +535,7 @@ public class SearchClient implements Logged {
       throw new IndexException(t);
     }
   }
-  
+
   private boolean hasPrefix(final String name, 
                            final Set<String> prefixes) {
     for (final String prefix: prefixes) {
