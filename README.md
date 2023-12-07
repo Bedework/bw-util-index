@@ -36,3 +36,29 @@ For full details, see [Sonatype's documentation for using Maven to publish relea
 ### 4.1.0
     * Split off from bw-util
     * Removed filters parameter from postGetEvents and associated methods - not used.
+
+#### 4.1.1
+* Update library versions
+
+#### 4.1.2
+* Update library versions
+
+#### 4.1.3
+* Update library versions
+
+#### 4.1.4
+* Update library versions
+
+#### 5.0.0
+* Use bedework parent
+* Update library versions
+* Add user authentication to elasticsearch
+* Switch from ElasticSearch to OpenSearch because of licence issues.
+* Whole bunch of changes to handle ssl for opensearch.
+
+#### 5.0.1
+* Update library versions
+* Add dependency on latest snakeyaml to avoid CVEs
+* Move Indexing mbean out of opensearch package to remove unnecessary dependencies.
+* Fix restore of BwGeo - stored as BigDecimal value
+* Add code to query opensearch to get scroll context info.
