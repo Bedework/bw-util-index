@@ -68,8 +68,6 @@ import javax.net.ssl.SSLContext;
 
 import static org.bedework.util.misc.response.Response.Status.failed;
 
-//import org.bedework.util.timezones.DateTimeUtil;
-
 /**
  * User: mike Date: 3/13/16 Time: 23:28
  */
