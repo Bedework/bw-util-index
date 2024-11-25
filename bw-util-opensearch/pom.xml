@@ -63,6 +63,16 @@
     </dependency>
 
     <dependency>
+      <groupId>org.opensearch</groupId>
+      <artifactId>opensearch-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opensearch</groupId>
+      <artifactId>opensearch-x-content</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.opensearch.client</groupId>
       <artifactId>opensearch-rest-high-level-client</artifactId>
     </dependency>

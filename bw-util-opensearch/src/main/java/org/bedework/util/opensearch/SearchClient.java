@@ -48,8 +48,8 @@ import org.opensearch.client.indices.CreateIndexResponse;
 import org.opensearch.cluster.health.ClusterHealthStatus;
 import org.opensearch.cluster.metadata.AliasMetadata;
 import org.opensearch.common.xcontent.XContentType;
+import org.opensearch.core.rest.RestStatus;
 import org.opensearch.index.VersionType;
-import org.opensearch.rest.RestStatus;
 
 import java.io.File;
 import java.io.IOException;

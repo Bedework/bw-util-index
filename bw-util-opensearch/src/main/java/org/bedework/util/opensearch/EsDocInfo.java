@@ -5,7 +5,7 @@ package org.bedework.util.opensearch;
 
 import org.bedework.util.misc.ToString;
 
-import org.opensearch.common.xcontent.XContentBuilder;
+import org.opensearch.core.xcontent.XContentBuilder;
 
 /**
  * User: mike Date: 3/14/16 Time: 01:03
