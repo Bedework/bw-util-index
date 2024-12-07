@@ -30,8 +30,8 @@ import java.util.Set;
  * @author douglm
  *
  */
-public class EsCtl extends ConfBase<IndexingPropertiesImpl>
-        implements EsCtlMBean {
+public class IndexCtl extends ConfBase<IndexingPropertiesImpl>
+        implements IndexCtlMBean {
   /* Name of the directory holding the config data */
   private static final String confDirName = "opensearch";
 
@@ -51,14 +51,14 @@ public class EsCtl extends ConfBase<IndexingPropertiesImpl>
     info(listIndexes(is));
   }
 
-  private final static String nm = "esctl";
+  private final static String nm = "indexctl";
 
   private OschUtil oschUtil;
   private SearchClient sch;
 
   /**
    */
-  public EsCtl() {
+  public IndexCtl() {
     super(getServiceName(nm), confDirName, nm);
   }
 
@@ -67,7 +67,7 @@ public class EsCtl extends ConfBase<IndexingPropertiesImpl>
    * @return object name value for the mbean with this name
    */
   public static String getServiceName(final String name) {
-    return EsCtlMBean.serviceName;
+    return IndexCtlMBean.serviceName;
   }
 
   @Override

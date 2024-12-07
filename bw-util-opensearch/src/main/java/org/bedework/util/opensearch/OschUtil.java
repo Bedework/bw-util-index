@@ -29,13 +29,13 @@ public class OschUtil implements Logged {
     searchHosts = new HostPortList(idxpars.getIndexerURL());
   }
   
-  private static EsCtlMBean esCtl;
+  private static IndexCtlMBean indexCtl;
 
   static class Configurator extends ConfBase {
-    EsCtl esCtl;
+    IndexCtl indexCtl;
 
     Configurator() {
-      super("org.bedework.es:service=es",
+      super("org.bedework.es:service=index",
             (String)null,
             null);
     }
@@ -52,11 +52,11 @@ public class OschUtil implements Logged {
       try {
         getManagementContext().start();
 
-        esCtl = new EsCtl();
-        register(new ObjectName(esCtl.getServiceName()),
-                 esCtl);
+        indexCtl = new IndexCtl();
+        register(new ObjectName(indexCtl.getServiceName()),
+                 indexCtl);
 
-        status = esCtl.loadConfig();
+        status = indexCtl.loadConfig();
       } catch (final Throwable t){
         t.printStackTrace();
         throw new RuntimeException(t);
@@ -81,7 +81,7 @@ public class OschUtil implements Logged {
       try {
         return getManagementContext()
                 .getMBeanServer()
-                .isRegistered(new ObjectName(EsCtlMBean.serviceName));
+                .isRegistered(new ObjectName(IndexCtlMBean.serviceName));
       } catch (final Throwable t) {
         t.printStackTrace();
         throw new RuntimeException(t);
@@ -91,9 +91,9 @@ public class OschUtil implements Logged {
 
   private static final Configurator conf = new Configurator();
 
-  public static EsCtlMBean getEsCtl() throws IndexException {
-    if (esCtl != null) {
-      return esCtl;
+  public static IndexCtlMBean getIndexCtl() throws IndexException {
+    if (indexCtl != null) {
+      return indexCtl;
     }
 
     try {
@@ -104,13 +104,13 @@ public class OschUtil implements Logged {
         conf.start();
       }
       
-      esCtl = (EsCtlMBean)MBeanUtil.getMBean(EsCtlMBean.class,
-                                             EsCtlMBean.serviceName);
+      indexCtl = (IndexCtlMBean)MBeanUtil.getMBean(IndexCtlMBean.class,
+                                                   IndexCtlMBean.serviceName);
     } catch (final Throwable t) {
       throw new IndexException(t);
     }
 
-    return esCtl;
+    return indexCtl;
   }
 
   /* ====================================================================
