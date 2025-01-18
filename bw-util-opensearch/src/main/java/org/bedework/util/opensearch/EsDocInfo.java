@@ -3,7 +3,7 @@
 */
 package org.bedework.util.opensearch;
 
-import org.bedework.util.misc.ToString;
+import org.bedework.base.ToString;
 
 import org.opensearch.core.xcontent.XContentBuilder;
 

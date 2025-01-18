@@ -20,7 +20,7 @@ package org.bedework.util.indexing;
 
 import org.bedework.util.config.ConfInfo;
 import org.bedework.util.config.ConfigBase;
-import org.bedework.util.misc.ToString;
+import org.bedework.base.ToString;
 
 /** These are the system properties that the server needs to know about, either
  * because it needs to apply these limits or just to report them to clients.
