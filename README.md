@@ -62,3 +62,14 @@ For full details, see [Sonatype's documentation for using Maven to publish relea
 * Move Indexing mbean out of opensearch package to remove unnecessary dependencies.
 * Fix restore of BwGeo - stored as BigDecimal value
 * Add code to query opensearch to get scroll context info.
+
+#### 5.0.2
+* Update library versions
+* Update to opensearch 2.18.0
+
+#### 5.0.3
+* Update library versions
+* Remove last traces of elastic search from class names. Make some more generic.
+
+#### 5.0.4
+* Move response classes and ToString into bw-base module.
