@@ -1,0 +1,31 @@
+= Bedework Indexing Modules.
+:title: Bedework Indexing modules.
+:safe-mode-unsafe:
+:docinfo: shared
+:docinfodir: ./docinfo
+:docinfo2:
+:scriptsdir: ./tocbot-3.0.2
+:imagesdir: ./resources/
+:toc: left
+:toclevels: 4
+:sectnumlevels: 4
+//
+:reports-dir: reports
+:util-indexing-dir: util-indexing
+:util-opensearch-dir: util-opensearch
+//
+:sectnums!:
+
+include::introduction.adoc[]
+
+:sectnums:
+
+include::{util-indexing-dir}/overview.adoc[]
+include::{util-indexing-dir}/using.adoc[]
+
+include::{util-opensearch-dir}/overview.adoc[]
+include::{util-opensearch-dir}/using.adoc[]
+
+[[reports]]
+== Reports
+link:{reports-dir}/dependency-check-report.html[Dependency check]

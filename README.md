@@ -1,75 +1,23 @@
-# bw-util-index [![Build Status](https://travis-ci.org/Bedework/bw-util-index.svg)](https://travis-ci.org/Bedework/bw-util-index)
+# bw-util-index
 
 This project provides a number of utility classes and methods related to indexing for
 [Bedework](https://www.apereo.org/projects/bedework).
 
 ## Requirements
 
-1. JDK 11
+1. JDK 21
 2. Maven 3
 
-## Building Locally
+## Using this project
+See documentation at [github pages for this project](https://bedework.github.io/bw-network/)
 
-> mvn clean install
+## Reporting Issues
+Please report issues via the github issues tab at
+> https://github.com/Bedework/bw-network/issues
 
-## Releasing
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Releases of this fork are published to Maven Central via Sonatype.
+## Security - Vulnerability reporting
+See [SECURITY.md](SECURITY.md).
 
-To create a release, you must have:
-
-1. Permissions to publish to the `org.bedework` groupId.
-2. `gpg` installed with a published key (release artifacts are signed).
-
-To perform a new release:
-
-> mvn -P bedework-dev release:clean release:prepare
-
-When prompted, select the desired version; accept the defaults for scm tag and next development version.
-When the build completes, and the changes are committed and pushed successfully, execute:
-
-> mvn -P bedework-dev release:perform
-
-For full details, see [Sonatype's documentation for using Maven to publish releases](http://central.sonatype.org/pages/apache-maven.html).
-
-## Release Notes
-### 4.1.0
-    * Split off from bw-util
-    * Removed filters parameter from postGetEvents and associated methods - not used.
-
-#### 4.1.1
-* Update library versions
-
-#### 4.1.2
-* Update library versions
-
-#### 4.1.3
-* Update library versions
-
-#### 4.1.4
-* Update library versions
-
-#### 5.0.0
-* Use bedework parent
-* Update library versions
-* Add user authentication to elasticsearch
-* Switch from ElasticSearch to OpenSearch because of licence issues.
-* Whole bunch of changes to handle ssl for opensearch.
-
-#### 5.0.1
-* Update library versions
-* Add dependency on latest snakeyaml to avoid CVEs
-* Move Indexing mbean out of opensearch package to remove unnecessary dependencies.
-* Fix restore of BwGeo - stored as BigDecimal value
-* Add code to query opensearch to get scroll context info.
-
-#### 5.0.2
-* Update library versions
-* Update to opensearch 2.18.0
-
-#### 5.0.3
-* Update library versions
-* Remove last traces of elastic search from class names. Make some more generic.
-
-#### 5.0.4
-* Move response classes and ToString into bw-base module.

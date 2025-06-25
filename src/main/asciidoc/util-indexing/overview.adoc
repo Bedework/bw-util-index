@@ -1,0 +1,4 @@
+[[indexing]]
+== Util-indexing
+Provides generic utility classes for indexing in services such as opensearch.
+

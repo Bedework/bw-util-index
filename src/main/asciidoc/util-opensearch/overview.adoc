@@ -1,0 +1,4 @@
+[[opensearch]]
+== Util-opensearch
+Provides classes to handle indexing to opensearch.
+
