@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.bedework</groupId>
     <artifactId>bedework-parent</artifactId>
-    <version>218</version>
+    <version>239-SNAPSHOT</version>
   </parent>
 
   <artifactId>bw-util-index</artifactId>
@@ -22,6 +22,7 @@
   </scm>
 
   <modules>
+    <module>bw-util-index-asciidocs</module>
     <module>bw-util-indexing</module>
     <module>bw-util-opensearch</module>
   </modules>

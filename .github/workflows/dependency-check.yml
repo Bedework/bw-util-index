@@ -58,6 +58,8 @@ jobs:
         run: |
           mvn -Pbedework-dev,depcheck --settings ./.github/workflows/settings.xml \
             --no-transfer-progress clean install -DskipTests \
+            -DossIndexUsername="${{secrets.OSSINDEXUSER}}" \
+            -DossIndexPassword="${{secrets.OSSINDEXPW}}" \
             -DnvdApiKey=${{secrets.nvdApiKey}} -DskipITs -Dmax.cvss.score=8 \
             org.owasp:dependency-check-maven:aggregate 
           #  -l ${{github.workspace}}/mvn-output.txt
@@ -72,7 +74,7 @@ jobs:
           git config --local user.name "github-actions"
           git pull
           cp -r ./target/reports docs/
-          cp -r ./target/reports src/main/asciidoc/
+          cp -r ./target/reports bw-util-index-asciidocs/src/main/asciidoc/
           git add .
           git commit -m "deploy generated dependency check report"
           git push
