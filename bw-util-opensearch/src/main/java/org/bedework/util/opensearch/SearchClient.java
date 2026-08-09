@@ -3,6 +3,7 @@
 */
 package org.bedework.util.opensearch;
 
+import org.bedework.base.response.GetEntityResponse;
 import org.bedework.util.http.Headers;
 import org.bedework.util.indexing.ContextInfo;
 import org.bedework.util.indexing.IndexException;
@@ -10,8 +11,6 @@ import org.bedework.util.indexing.IndexingProperties;
 import org.bedework.util.logging.BwLogger;
 import org.bedework.util.logging.Logged;
 import org.bedework.util.misc.Util;
-import org.bedework.base.response.GetEntityResponse;
-import org.bedework.util.timezones.DateTimeUtil;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,6 +66,7 @@ import java.util.stream.Stream;
 import javax.net.ssl.SSLContext;
 
 import static org.bedework.base.response.Response.Status.failed;
+import static org.bedework.util.dates.DateFormatter.icalDateTimeUTCFormat;
 
 /**
  * User: mike Date: 3/13/16 Time: 23:28
@@ -549,7 +549,7 @@ public class SearchClient implements Logged {
     // ES only allows lower case letters in names (and digits)
     final StringBuilder suffix = new StringBuilder("p");
 
-    final char[] ch = DateTimeUtil.isoDateTimeUTC(new Date()).toCharArray();
+    final char[] ch = icalDateTimeUTCFormat.fromDate(new Date()).toCharArray();
 
     for (int i = 0; i < 8; i++) {
       suffix.append(ch[i]);

@@ -33,6 +33,11 @@
 
     <dependency>
       <groupId>org.bedework</groupId>
+      <artifactId>bw-util-dates</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bedework</groupId>
       <artifactId>bw-util-jmx</artifactId>
     </dependency>
 
